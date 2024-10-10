@@ -3,3 +3,4 @@ node_modules/
 .npm
 .downloads
 test-results/
+report.json

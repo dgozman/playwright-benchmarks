@@ -19,15 +19,23 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
+    env:
+      BROWSER_NAME: chromium
+      REPS: 100
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
     - run: npm ci
     - run: npx playwright install chromium
+    - run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- npx playwright test
+      if: matrix.os == 'ubuntu-latest'
     - run: npx playwright test
-      env:
-        BROWSER_NAME: chromium
-        REPS: 100
+      if: matrix.os != 'ubuntu-latest'
+    - uses: actions/upload-artifact@v4
+      with:
+        name: report
+        path: report.json
+        retention-days: 1
 
   test_headed:
     name: headed ${{ matrix.os }}
@@ -36,16 +44,24 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
+    env:
+      BROWSER_NAME: chromium
+      REPS: 100
+      HEADED: 1
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
     - run: npm ci
     - run: npx playwright install chromium
+    - run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- npx playwright test
+      if: matrix.os == 'ubuntu-latest'
     - run: npx playwright test
-      env:
-        BROWSER_NAME: chromium
-        REPS: 100
-        HEADED: 1
+      if: matrix.os != 'ubuntu-latest'
+    - uses: actions/upload-artifact@v4
+      with:
+        name: report
+        path: report.json
+        retention-days: 1
 
   test_headless_new:
     name: headless=new ${{ matrix.os }}
@@ -54,16 +70,24 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
+    env:
+      BROWSER_NAME: chromium
+      REPS: 100
+      PLAYWRIGHT_CHROMIUM_USE_HEADLESS_NEW: 1
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
     - run: npm ci
     - run: npx playwright install chromium
+    - run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- npx playwright test
+      if: matrix.os == 'ubuntu-latest'
     - run: npx playwright test
-      env:
-        BROWSER_NAME: chromium
-        REPS: 100
-        PLAYWRIGHT_CHROMIUM_USE_HEADLESS_NEW: 1
+      if: matrix.os != 'ubuntu-latest'
+    - uses: actions/upload-artifact@v4
+      with:
+        name: report
+        path: report.json
+        retention-days: 1
 
   test_chrome_for_testing_headless_old:
     name: chrome for testing headless=old ${{ matrix.os }}
@@ -72,18 +96,27 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
+    env:
+      BROWSER_NAME: chromium
+      REPS: 100
+      READ_EXECUTABLE_PATH_FROM: ".downloads/chrome-for-testing.txt"
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
     - run: npm ci
     - run: npx playwright install chromium
+    - run: mkdir .downloads
     - run: npx -y @puppeteer/browsers install chrome@130 > chrome-for-testing.txt
       working-directory: .downloads
+    - run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- npx playwright test
+      if: matrix.os == 'ubuntu-latest'
     - run: npx playwright test
-      env:
-        BROWSER_NAME: chromium
-        REPS: 100
-        READ_EXECUTABLE_PATH_FROM: ".downloads/chrome-for-testing.txt"
+      if: matrix.os != 'ubuntu-latest'
+    - uses: actions/upload-artifact@v4
+      with:
+        name: report
+        path: report.json
+        retention-days: 1
 
   test_chrome_for_testing_headed:
     name: chrome for testing headed ${{ matrix.os }}
@@ -92,19 +125,28 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
+    env:
+      BROWSER_NAME: chromium
+      REPS: 100
+      READ_EXECUTABLE_PATH_FROM: ".downloads/chrome-for-testing.txt"
+      HEADED: 1
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
     - run: npm ci
     - run: npx playwright install chromium
+    - run: mkdir .downloads
     - run: npx -y @puppeteer/browsers install chrome@130 > chrome-for-testing.txt
       working-directory: .downloads
+    - run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- npx playwright test
+      if: matrix.os == 'ubuntu-latest'
     - run: npx playwright test
-      env:
-        BROWSER_NAME: chromium
-        REPS: 100
-        READ_EXECUTABLE_PATH_FROM: ".downloads/chrome-for-testing.txt"
-        HEADED: 1
+      if: matrix.os != 'ubuntu-latest'
+    - uses: actions/upload-artifact@v4
+      with:
+        name: report
+        path: report.json
+        retention-days: 1
 
   test_chrome_for_testing_headless_new:
     name: chrome for testing headless=new ${{ matrix.os }}
@@ -113,16 +155,37 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
+    env:
+      BROWSER_NAME: chromium
+      REPS: 100
+      READ_EXECUTABLE_PATH_FROM: ".downloads/chrome-for-testing.txt"
+      PLAYWRIGHT_CHROMIUM_USE_HEADLESS_NEW: 1
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
     - run: npm ci
     - run: npx playwright install chromium
+    - run: mkdir .downloads
     - run: npx -y @puppeteer/browsers install chrome@130 > chrome-for-testing.txt
       working-directory: .downloads
+    - run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- npx playwright test
+      if: matrix.os == 'ubuntu-latest'
     - run: npx playwright test
-      env:
-        BROWSER_NAME: chromium
-        REPS: 100
-        READ_EXECUTABLE_PATH_FROM: ".downloads/chrome-for-testing.txt"
-        PLAYWRIGHT_CHROMIUM_USE_HEADLESS_NEW: 1
+      if: matrix.os != 'ubuntu-latest'
+    - uses: actions/upload-artifact@v4
+      with:
+        name: report
+        path: report.json
+        retention-days: 1
+
+  merge_reports:
+    name: merge reports
+    runs-on: unbuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+    - uses: actions/download-artifact@v4
+      with:
+        name: report
+        path: .downloads
+    - run: node merge-reports.mjs .downloads

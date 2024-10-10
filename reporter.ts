@@ -1,5 +1,7 @@
 import type { FullConfig, FullResult, Reporter, Suite, TestCase, TestResult } from '@playwright/test/reporter';
 import path from 'path';
+import fs from 'fs';
+import { title, reps } from './common';
 
 export default class TotalTimeReporter implements Reporter {
   private _startTime = new Map<string, number>();
@@ -26,11 +28,16 @@ export default class TotalTimeReporter implements Reporter {
   }
 
   async onEnd(result: FullResult) {
-    console.log(`|File|Time|`);
-    console.log(`|:---|:---|`);
-    for (const file of this._startTime.keys()) {
-      const duration = this._endTime.get(file)! - this._startTime.get(file)!;
-      console.log(`|${path.relative(this._config.rootDir, file)}|${duration}|`);
-    }
+    const files = [...this._startTime.keys()].map(file => ({
+      file: path.relative(this._config.rootDir, file),
+      duration: this._endTime.get(file)! - this._startTime.get(file)!,
+    }));
+    const json = {
+      os: { 'darwin': 'macos', 'linux': 'linux', 'win32': 'windows' }[process.platform],
+      title: title(),
+      reps,
+      files,
+    };
+    fs.writeFileSync(path.join(__dirname, 'report.json'), JSON.stringify(json, null, 2));
   }
 }
