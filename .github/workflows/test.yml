@@ -1,0 +1,140 @@
+name: "test"
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+env:
+  FORCE_COLOR: 1
+
+jobs:
+  test_headless:
+    name: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os : [ubuntu-latest, macos-latest, windows-latest]
+    runs-os: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+    - run: npm ci
+    - run: npx playwright install chromium
+    - run: npx playwright test
+      env:
+        BROWSER_NAME: chromium
+        REPS: 100
+
+  test_headed:
+    name: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os : [ubuntu-latest, macos-latest, windows-latest]
+    runs-os: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+    - run: npm ci
+    - run: npx playwright install chromium
+    - run: npx playwright test
+      env:
+        BROWSER_NAME: chromium
+        HEADED: 1
+        REPS: 100
+
+  test_headless_new:
+    name: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os : [ubuntu-latest, macos-latest, windows-latest]
+    runs-os: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+    - run: npm ci
+    - run: npx playwright install chromium
+    - run: npx playwright test
+      env:
+        BROWSER_NAME: chromium
+        PLAYWRIGHT_CHROMIUM_USE_HEADLESS_NEW: 1
+        REPS: 100
+
+  test_chrome_for_testing_headless:
+    name: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os : [ubuntu-latest, macos-latest, windows-latest]
+    runs-os: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+    - run: npm ci
+    - run: npx playwright install chromium
+    - run: npx -y @puppeteer/browsers install chrome@130 > chrome-for-testing.txt
+      cwd: .downloads
+    - run: npx playwright test
+      env:
+        BROWSER_NAME: chromium
+        READ_EXECUTABLE_PATH_FROM: ".downloads/chrome-for-testing.txt"
+        REPS: 100
+
+  test_chrome_for_testing_headed:
+    name: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os : [ubuntu-latest, macos-latest, windows-latest]
+    runs-os: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+    - run: npm ci
+    - run: npx playwright install chromium
+    - run: npx -y @puppeteer/browsers install chrome@130 > chrome-for-testing.txt
+      cwd: .downloads
+    - run: npx playwright test
+      env:
+        BROWSER_NAME: chromium
+        READ_EXECUTABLE_PATH_FROM: ".downloads/chrome-for-testing.txt"
+        REPS: 100
+        HEADED: 1
+
+  test_chrome_for_testing_headless_new:
+    name: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os : [ubuntu-latest, macos-latest, windows-latest]
+    runs-os: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+    - run: npm ci
+    - run: npx playwright install chromium
+    - run: npx -y @puppeteer/browsers install chrome@130 > chrome-for-testing.txt
+      cwd: .downloads
+    - run: npx playwright test
+      env:
+        BROWSER_NAME: chromium
+        READ_EXECUTABLE_PATH_FROM: ".downloads/chrome-for-testing.txt"
+        REPS: 100
+        PLAYWRIGHT_CHROMIUM_USE_HEADLESS_NEW: 1
