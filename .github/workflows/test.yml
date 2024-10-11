@@ -33,7 +33,7 @@ jobs:
       if: matrix.os != 'ubuntu-latest'
     - uses: actions/upload-artifact@v4
       with:
-        name: report
+        name: report_headless_old
         path: report.json
         retention-days: 1
 
@@ -59,7 +59,7 @@ jobs:
       if: matrix.os != 'ubuntu-latest'
     - uses: actions/upload-artifact@v4
       with:
-        name: report
+        name: report_headed
         path: report.json
         retention-days: 1
 
@@ -85,7 +85,7 @@ jobs:
       if: matrix.os != 'ubuntu-latest'
     - uses: actions/upload-artifact@v4
       with:
-        name: report
+        name: report_headless_new
         path: report.json
         retention-days: 1
 
@@ -114,7 +114,7 @@ jobs:
       if: matrix.os != 'ubuntu-latest'
     - uses: actions/upload-artifact@v4
       with:
-        name: report
+        name: report_cft_headless_old
         path: report.json
         retention-days: 1
 
@@ -144,7 +144,7 @@ jobs:
       if: matrix.os != 'ubuntu-latest'
     - uses: actions/upload-artifact@v4
       with:
-        name: report
+        name: report_cft_headed
         path: report.json
         retention-days: 1
 
@@ -174,7 +174,7 @@ jobs:
       if: matrix.os != 'ubuntu-latest'
     - uses: actions/upload-artifact@v4
       with:
-        name: report
+        name: report_cft_headless_new
         path: report.json
         retention-days: 1
 
@@ -187,6 +187,7 @@ jobs:
     - uses: actions/setup-node@v4
     - uses: actions/download-artifact@v4
       with:
-        name: report
+        pattern: report_*
         path: .downloads
+    - run: ls -lR .downloads
     - run: node merge-reports.mjs .downloads
