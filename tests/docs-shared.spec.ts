@@ -60,5 +60,8 @@ for (let i = 0; i < reps; i++) {
 
     await page.getByRole('link', { name: 'Previous « Welcome' }).click();
     await expect(page).toHaveURL('https://playwright.dev/dotnet/community/welcome');
+
+    await page.getByRole('button', { name: '.NET' }).hover();
+    await page.getByRole('link', { name: 'Node.js' }).click();
   });
 }
