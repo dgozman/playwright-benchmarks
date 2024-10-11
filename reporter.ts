@@ -1,7 +1,7 @@
 import type { FullConfig, FullResult, Reporter, Suite, TestCase, TestResult } from '@playwright/test/reporter';
 import path from 'path';
 import fs from 'fs';
-import { title, reps } from './common';
+import { title, reps, headlessTitle } from './common';
 
 export default class TotalTimeReporter implements Reporter {
   private _startTime = new Map<string, number>();
@@ -35,6 +35,7 @@ export default class TotalTimeReporter implements Reporter {
     const json = {
       os: { 'darwin': 'macos', 'linux': 'linux', 'win32': 'windows' }[process.platform],
       title: title(),
+      headlessTitle: headlessTitle(),
       reps,
       files,
     };

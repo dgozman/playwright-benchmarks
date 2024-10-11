@@ -18,7 +18,9 @@ export function executablePath() {
 }
 
 export function title() {
-  const suffix = headless ? (process.env.PLAYWRIGHT_CHROMIUM_USE_HEADLESS_NEW ? 'headless=old' : 'headless=new') : 'headed';
-  const title = readExecutablePath().title;
-  return (title || 'chromium') + ' ' + suffix;
+  return readExecutablePath().title || 'chromium';
+}
+
+export function headlessTitle() {
+  return headless ? (process.env.PLAYWRIGHT_CHROMIUM_USE_HEADLESS_NEW ? 'headless=new' : 'headless=old') : 'headed';
 }
