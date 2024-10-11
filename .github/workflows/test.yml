@@ -12,7 +12,7 @@ env:
   FORCE_COLOR: 1
 
 jobs:
-  test_headless_old:
+  headless_old:
     name: headless=old ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -37,7 +37,7 @@ jobs:
         path: report.json
         retention-days: 1
 
-  test_headed:
+  headed:
     name: headed ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -63,7 +63,7 @@ jobs:
         path: report.json
         retention-days: 1
 
-  test_headless_new:
+  headless_new:
     name: headless=new ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -89,7 +89,7 @@ jobs:
         path: report.json
         retention-days: 1
 
-  test_chrome_for_testing_headless_old:
+  cft_headless_old:
     name: chrome for testing headless=old ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -118,7 +118,7 @@ jobs:
         path: report.json
         retention-days: 1
 
-  test_chrome_for_testing_headed:
+  cft_headed:
     name: chrome for testing headed ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -148,7 +148,7 @@ jobs:
         path: report.json
         retention-days: 1
 
-  test_chrome_for_testing_headless_new:
+  cft_headless_new:
     name: chrome for testing headless=new ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -180,6 +180,7 @@ jobs:
 
   merge_reports:
     name: merge reports
+    needs: [headless_old, headed, headless_new, cft_headless_old, cft_headed, cft_headless_new]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
