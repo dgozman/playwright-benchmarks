@@ -33,7 +33,7 @@ jobs:
       if: matrix.os != 'ubuntu-latest'
     - uses: actions/upload-artifact@v4
       with:
-        name: report_headless_old
+        name: report_headless_old_${{ matrix.os }}
         path: report.json
         retention-days: 1
 
@@ -59,7 +59,7 @@ jobs:
       if: matrix.os != 'ubuntu-latest'
     - uses: actions/upload-artifact@v4
       with:
-        name: report_headed
+        name: report_headed_${{ matrix.os }}
         path: report.json
         retention-days: 1
 
@@ -85,7 +85,7 @@ jobs:
       if: matrix.os != 'ubuntu-latest'
     - uses: actions/upload-artifact@v4
       with:
-        name: report_headless_new
+        name: report_headless_new_${{ matrix.os }}
         path: report.json
         retention-days: 1
 
@@ -114,7 +114,7 @@ jobs:
       if: matrix.os != 'ubuntu-latest'
     - uses: actions/upload-artifact@v4
       with:
-        name: report_cft_headless_old
+        name: report_cft_headless_old_${{ matrix.os }}
         path: report.json
         retention-days: 1
 
@@ -144,7 +144,7 @@ jobs:
       if: matrix.os != 'ubuntu-latest'
     - uses: actions/upload-artifact@v4
       with:
-        name: report_cft_headed
+        name: report_cft_headed_${{ matrix.os }}
         path: report.json
         retention-days: 1
 
@@ -174,7 +174,7 @@ jobs:
       if: matrix.os != 'ubuntu-latest'
     - uses: actions/upload-artifact@v4
       with:
-        name: report_cft_headless_new
+        name: report_cft_headless_new_${{ matrix.os }}
         path: report.json
         retention-days: 1
 
