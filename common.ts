@@ -17,8 +17,12 @@ export function executablePath() {
   return process.env.EXECUTABLE_PATH || readExecutablePath().executablePath;
 }
 
+export function channel() {
+  return process.env.CHANNEL;
+}
+
 export function title() {
-  return readExecutablePath().title || 'chromium';
+  return channel() || readExecutablePath().title || 'chromium';
 }
 
 export function headlessTitle() {

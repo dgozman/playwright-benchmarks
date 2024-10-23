@@ -90,6 +90,32 @@ jobs:
         path: report.json
         retention-days: 1
 
+  headless_shell:
+    name: headless-shell ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    env:
+      BROWSER_NAME: chromium
+      REPS: 100
+      CHANNEL: chromium-headless-shell
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+    - run: npm ci
+    - run: npx playwright install chromium-headless-shell
+    - run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- npx playwright test
+      if: matrix.os == 'ubuntu-latest'
+    - run: npx playwright test
+      if: matrix.os != 'ubuntu-latest'
+    - uses: actions/upload-artifact@v4
+      with:
+        name: report_headless_shell_${{ matrix.os }}
+        path: report.json
+        retention-days: 1
+
   cft_headless_old:
     name: chrome for testing headless=old ${{ matrix.os }}
     strategy:
