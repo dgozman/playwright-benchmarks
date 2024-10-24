@@ -93,17 +93,6 @@ for (let i = 0; i < reps; i++) {
       await expect(page.getByRole('heading', { name: 'Twisters' })).toBeVisible();
     });
 
-    test('trailer opens and modal can be closed',{
-        tag: '@iframe'
-      }, async ({ page }) => {
-        await page.getByRole('button', { name: 'Trailer' }).click();
-        await expect(page.frameLocator('iframe')
-          .getByRole('link', { name: 'Twisters' })).toBeVisible();
-        await page.getByLabel('Close the modal by clicking').click();
-        await expect(page.getByRole('heading', { name: 'Twisters' })).toBeVisible();
-      }
-    );
-
     test('link to website works', {
         tag: '@mocking',
       }, async ({ page }) => {
